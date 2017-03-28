@@ -1,0 +1,76 @@
+.search-bar, .map-results{
+    padding: 20px;
+    border: 1px solid #d9d9d9;
+    margin-top: 20px;
+    border-radius: 9px;
+}
+
+.map-results{
+    padding: 20px 0;
+    position: relative;
+}
+
+.map-results .badge-primary{
+    background-color: #fc0000;
+}
+
+.result-item-title{
+    padding-bottom: 7px;
+    border-bottom: 1px solid #eee;
+}
+
+.search-results{
+    height: 500px;
+    overflow-y: auto;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+#map-canvas {
+    position: relative;
+    height: 500px;
+    background: #ddd;
+}
+
+.load-wrap{
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.33);
+}
+
+.hide{
+    display: none !important;
+}
+
+.loading {
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    border: 4px solid #ccc;
+    border-top-color: #292b2c;
+    animation: spin 1.2s infinite linear;
+    display: inline-block;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+/* Direction Card */
+.card.direction {
+    position: absolute;
+    right: 0px;
+    width: 33.3333%;
+    height: 500px;
+}
