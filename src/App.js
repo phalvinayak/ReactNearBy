@@ -68,9 +68,11 @@ export default class App extends Component {
             this.mapHelper.searchPlaces(this.state.position, this.state.term).then(results => {
                 this.setState({results});
                 this.mapHelper.populateResults(results);
-                this.setState({isSearching: false});
             }).catch(error => {
-                console.error(error);
+                this.mapHelper.removeMarkers();
+                this.setState({results: []});
+            }).then(()=>{ // Similar to always in jQuery...
+                this.setState({isSearching: false});
             });
         } else{
             console.error("No search term to start a search");

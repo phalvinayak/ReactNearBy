@@ -6,7 +6,7 @@ export default ({results, mapHelper}) => {
     if(results.length){
         content = results.map((result,index)=> <SearchResultListItem key={result.id} result={result} mapHelper={mapHelper} label={index + 1} />);
     } else {
-        content = <p>Start with search...</p>
+        content = <p>No Results, Start with new search...</p>
     }
     return (
         <div className="list-group">{content}</div>
