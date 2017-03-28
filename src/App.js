@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import SearchBar from "./components/search-bar";
 import SearchResultList from "./components/search-result-list";
-import Direction from "./components/direction";
+// import Direction from "./components/direction";
 import MapHelper from "./utils/map-helper";
 import Storage from "./utils/storage";
 import config from "./config";
