@@ -70,7 +70,7 @@ export default class mapUtil{
             this.markers.push(marker);
         });
         this.mapInstance.fitBounds(bounds);
-    }s
+    }
 
     removeMarkers(){
         this.markers.forEach(marker => marker.setMap(null));
