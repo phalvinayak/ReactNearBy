@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import SearchBar from "./components/search-bar";
 import SearchResultList from "./components/search-result-list";
-// import Direction from "./components/direction";
+/*import Direction from "./components/direction";*/
 import MapHelper from "./utils/map-helper";
 import Storage from "./utils/storage";
 import config from "./config";
@@ -26,7 +26,7 @@ export default class App extends Component {
             this.setState({map});
             this.mapHelper.getCurrentLocation().then(position => {
                 this.mapHelper.renderMap(document.getElementById("map-canvas"), position);
-                this.mapHelper.setCurrentPosition(this.masInstace, position);
+                this.mapHelper.setCurrentPosition(position);
                 this.setState({position}, () => {
                     this.setPositionMarker();
                 });
