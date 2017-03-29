@@ -1,16 +1,58 @@
-.search-bar, .map-results{
-    padding: 20px;
-    border: 1px solid #d9d9d9;
-    margin-top: 20px;
-    border-radius: 9px;
-}
-
-.map-results{
-    padding: 20px 0;
+/******************* Map Canvas *******************/
+#map-canvas {
     position: relative;
+    height: 100vh;
+    background: #ddd;
+}
+/**********************************************/
+
+/******************* Search Bar ********************/
+.card.search-result-box {
+    position: absolute;
+    width: 400px;
+    top: 0;
+    left: 0;
+    margin: 10px;
+    padding: 10px;
 }
 
-.map-results .badge-primary{
+#input-search {
+    text-transform: capitalize;
+}
+
+/**********************************************/
+
+/******************* Search Results *******************/
+.result-wrapper {
+    max-height:calc(100vh - 80px);
+    overflow-y: auto;
+    margin-top: 5px;
+}
+
+/* Let's get this party started */
+.result-wrapper::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* Track */
+.result-wrapper::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+/* Handle */
+.result-wrapper::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: rgba(102, 102, 102, 0.8);
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
+.result-wrapper::-webkit-scrollbar-thumb:window-inactive {
+    background: rgba(255,0,0,0.4);
+}
+
+.result-wrapper .badge-primary{
     background-color: #fc0000;
 }
 
@@ -19,24 +61,27 @@
     border-bottom: 1px solid #eee;
 }
 
+.result-item-title .heading{
+    width:90%;
+    display: inline-block;
+}
 .search-results{
     height: 500px;
     overflow-y: auto;
 }
+/**********************************************/
 
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+/******************* Direction Card *******************/
+.card.direction {
+    position: absolute;
+    right: 0px;
+    width: 33.3333%;
+    height: 500px;
 }
 
-#map-canvas {
-    position: relative;
-    height: 500px;
-    background: #ddd;
+/******************* Utility *******************/
+body {
+    overflow: hidden;
 }
 
 .load-wrap{
@@ -50,6 +95,15 @@
 
 .hide{
     display: none !important;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .loading {
@@ -67,10 +121,4 @@
 }
 
 
-/* Direction Card */
-.card.direction {
-    position: absolute;
-    right: 0px;
-    width: 33.3333%;
-    height: 500px;
-}
+

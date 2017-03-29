@@ -28,7 +28,7 @@ export default class SearchResultListItem extends PureComponent {
                 onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} data-index={label - 1}
                 onClick={this.onClick}>
                 <h5 className="w-100 result-item-title">
-                    <span>{result.name}</span>
+                    <span className="heading">{result.name}</span>
                     <span className="badge badge-primary float-right">{label}</span>
                 </h5>
                 <p className="mb-1">{result.formatted_address}</p>
