@@ -26,7 +26,6 @@ export default class App extends Component {
             this.setState({map});
             this.mapHelper.getCurrentLocation().then(position => {
                 this.mapHelper.renderMap(document.getElementById("map-canvas"), position);
-                this.mapHelper.setCurrentPosition(position);
                 this.setState({position}, () => {
                     this.setPositionMarker();
                 });

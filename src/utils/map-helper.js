@@ -26,6 +26,7 @@ export default class mapUtil{
     }
 
     setCurrentPosition(coords){
+        console.error("Current Location");
         const marker = new this.map.Marker({
             map: this.mapInstance,
             animation: this.map.Animation.DROP,
@@ -42,7 +43,7 @@ export default class mapUtil{
             const service = new this.map.places.PlacesService(this.mapInstance);
             service.textSearch({
                 location: new this.map.LatLng(coords.lat,coords.lng),
-                radius: config.searchRadius,
+                radius: config.searchRadius * 1000,
                 query
             }, (results, status) => {
                 if(status === this.map.places.PlacesServiceStatus.OK) {
