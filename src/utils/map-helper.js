@@ -26,6 +26,7 @@ export default class mapUtil{
     }
 
     setCurrentPosition(coords){
+        console.error("Current Location");
         const marker = new this.map.Marker({
             map: this.mapInstance,
             animation: this.map.Animation.DROP,
@@ -42,7 +43,7 @@ export default class mapUtil{
             const service = new this.map.places.PlacesService(this.mapInstance);
             service.textSearch({
                 location: new this.map.LatLng(coords.lat,coords.lng),
-                radius: config.searchRadius,
+                radius: config.searchRadius * 1000,
                 query
             }, (results, status) => {
                 if(status === this.map.places.PlacesServiceStatus.OK) {
@@ -109,11 +110,9 @@ export default class mapUtil{
     }
 
     highlightMarker(index){
-        if(this.markers[index] && this.markers[index].map) {
+        if(this.markers[index] && this.mapInstance.getBounds().contains(this.markers[index].getPosition())) {
             this.activeIconIndex = index;
             this.markers[this.activeIconIndex].setAnimation(this.map.Animation.BOUNCE);
-        } else {
-            console.log("Trapped in else condition");
         }
     }
 
@@ -126,9 +125,25 @@ export default class mapUtil{
     panToMarker(markerIndex){
         if(this.markers[markerIndex]) {
             const marker = this.markers[markerIndex];
-            console.log(marker.getPosition());
             this.mapInstance.panTo(marker.getPosition());
             this.mapInstance.setZoom(14);
+            this.mapRecenter();
+            if(markerIndex !== this.activeIconIndex) {
+                this.unhighlightMarker();
+                this.highlightMarker(markerIndex);
+            }
         }
+    }
+
+    mapRecenter(offsetx = 100, offsety = 0) {
+        let point1 = this.mapInstance.getProjection().fromLatLngToPoint(this.mapInstance.getCenter());
+        let point2 = new this.map.Point(
+            ( (typeof(offsetx) === 'number' ? offsetx : 0) / Math.pow(2, this.mapInstance.getZoom()) ) || 0,
+            ( (typeof(offsety) === 'number' ? offsety : 0) / Math.pow(2, this.mapInstance.getZoom()) ) || 0
+        );
+        this.mapInstance.setCenter(this.mapInstance.getProjection().fromPointToLatLng(new this.map.Point(
+            point1.x - point2.x,
+            point1.y + point2.y
+        )));
     }
 }

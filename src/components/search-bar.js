@@ -21,16 +21,19 @@ export default class SearchBar extends PureComponent {
 
     onSubmit = e => {
         e.preventDefault();
-        this.props.placeSearch(this.state.term);
-        Storage.setKey(this.store, "term", this.state.term);
+        if(this.state.term.trim() !== "" ) {
+            this.props.placeSearch(this.state.term);
+            Storage.setKey(this.store, "term", this.state.term);
+        }
     };
 
     render(){
         return (
-            <div className="col-md-12 search-bar">
-                <h1>React Google Maps Place Search API</h1>
+            <div className="search-bar">
                 <form className="input-group" onSubmit={this.onSubmit}>
-                    <input className="form-control" type="text" value={this.state.term} onChange={this.onChange} placeholder="Start Typing for things here..."  />
+                    <input className="form-control" id="input-search"
+                           type="text" value={this.state.term} onChange={this.onChange}
+                           placeholder="Search Google Maps"  />
                     <span className="input-group-btn">
                         <button className="btn btn-default">Go!</button>
                     </span>

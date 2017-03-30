@@ -26,7 +26,6 @@ export default class App extends Component {
             this.setState({map});
             this.mapHelper.getCurrentLocation().then(position => {
                 this.mapHelper.renderMap(document.getElementById("map-canvas"), position);
-                this.mapHelper.setCurrentPosition(position);
                 this.setState({position}, () => {
                     this.setPositionMarker();
                 });
@@ -68,9 +67,11 @@ export default class App extends Component {
             this.mapHelper.searchPlaces(this.state.position, this.state.term).then(results => {
                 this.setState({results});
                 this.mapHelper.populateResults(results);
-                this.setState({isSearching: false});
             }).catch(error => {
-                console.error(error);
+                this.mapHelper.removeMarkers();
+                this.setState({results: []});
+            }).then(()=>{ // Similar to always in jQuery...
+                this.setState({isSearching: false});
             });
         } else{
             console.error("No search term to start a search");
@@ -83,23 +84,19 @@ export default class App extends Component {
 
     render() {
         return (
-            <div className="container">
-                <div className="row">
-                    <SearchBar placeSearch={this.placeSearch} />
+
+            <div className="app-wrapper">
+                <div id="map-canvas">
+                    <span className="loading"></span>
                 </div>
-                <div className="row map-results">
-                    <div className="col-md-8 map">
-                        <div id="map-canvas">
-                            <span className="loading"></span>
-                        </div>
-                    </div>
-                    <div className="col-md-4 search-results">
+                <div className="card search-result-box">
+                    <SearchBar placeSearch={this.placeSearch} />
+                    <div className="result-wrapper">
                         <SearchResultList results={this.state.results} mapHelper={this.mapHelper} />
                     </div>
-                    { /* <Direction/> */ }
-                    <div className={`load-wrap ${this.state.isSearching ? "" : "hide"}`}>
-                        <span className="loading"></span>
-                    </div>
+                </div>
+                <div className={`load-wrap ${this.state.isSearching ? "" : "hide"}`}>
+                    <span className="loading"></span>
                 </div>
             </div>
         );
