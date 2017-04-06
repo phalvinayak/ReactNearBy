@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import SearchBar from "./components/search-bar";
 import SearchResultList from "./components/search-result-list";
-/*import Direction from "./components/direction";*/
+import Direction from "./components/direction";
 import MapHelper from "./utils/map-helper";
 import Storage from "./utils/storage";
 import config from "./config";
@@ -16,7 +16,9 @@ export default class App extends Component {
             term: "",
             results: [],
             mapHelper: this.mapHelper,
-            isSearching: false
+            isSearching: false,
+            selectedResult: null,
+            selectedIndex: null
         };
         this.initMap();
     }
@@ -78,21 +80,39 @@ export default class App extends Component {
         }
     }
 
-    directionMarker = markerIndex => {
+    selectedMarker = markerIndex => {
+        this.setState({
+            selectedResult: this.state.results[markerIndex],
+            selectedIndex: parseInt(markerIndex, 10) + 1
+        });
+    };
 
-    }
+    closeDirection = () => {
+        this.setState({selectedResult: null, selectedIndex: null});
+    };
 
     render() {
         return (
 
-            <div className="app-wrapper">
+            <div className="app-wrapper map-results">
                 <div id="map-canvas">
                     <span className="loading"></span>
                 </div>
                 <div className="card search-result-box">
                     <SearchBar placeSearch={this.placeSearch} />
-                    <div className="result-wrapper">
-                        <SearchResultList results={this.state.results} mapHelper={this.mapHelper} />
+                    <div className={`result-wrapper${this.state.selectedResult ? ' show-direction' : ''}`}>
+                        <SearchResultList
+                                results={this.state.results}
+                                selectedMarker={this.selectedMarker}
+                                mapHelper={this.mapHelper}>
+                        </SearchResultList>
+                        <Direction
+                            position={this.state.position}
+                            selectedResult={this.state.selectedResult}
+                            closeDirection={this.closeDirection}
+                            selectedIndex={this.state.selectedIndex}
+                            mapHelper={this.mapHelper}>
+                        </Direction>
                     </div>
                 </div>
                 <div className={`load-wrap ${this.state.isSearching ? "" : "hide"}`}>
