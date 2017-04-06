@@ -11,7 +11,7 @@ export default class mapUtil{
     initMap(){
         return new Promise((resolve, reject) => {
             $script([
-                `https://maps.googleapis.com/maps/api/js?key=${config.mapKey}&libraries=places`
+                `https://maps.googleapis.com/maps/api/js?key=${config.mapKey}&libraries=geometry,places`
             ],() => {
                 if(window.google.maps){
                     this.map = window.google.maps;
@@ -26,7 +26,6 @@ export default class mapUtil{
     }
 
     setCurrentPosition(coords){
-        console.error("Current Location");
         const marker = new this.map.Marker({
             map: this.mapInstance,
             animation: this.map.Animation.DROP,
@@ -39,14 +38,21 @@ export default class mapUtil{
     }
 
     searchPlaces(coords, query){
+        const location = new this.map.LatLng(coords.lat,coords.lng);
         return new Promise((resolve, reject) => {
             const service = new this.map.places.PlacesService(this.mapInstance);
-            service.textSearch({
-                location: new this.map.LatLng(coords.lat,coords.lng),
-                radius: config.searchRadius * 1000,
-                query
+            service.nearbySearch({
+                location: location,
+                keyword: query,
+                rankBy: this.map.places.RankBy.DISTANCE
             }, (results, status) => {
                 if(status === this.map.places.PlacesServiceStatus.OK) {
+                    // console.log("Resutls: ", results);
+                    let distance = 0;
+                    results.forEach( result => {
+                        distance = parseFloat(this.map.geometry.spherical.computeDistanceBetween(location, result.geometry.location)/1000, 2);
+                        result.distance = `${String(distance.toFixed(2))}km`;
+                    });
                     resolve(results);
                 } else {
                     reject("Unable to find places in nearby search radius");
@@ -107,9 +113,14 @@ export default class mapUtil{
             streetViewControl: false,
             center: coords
         });
+        this.directionsService = new this.map.DirectionsService();
+        this.directionsDisplay = new this.map.DirectionsRenderer({
+            map: this.mapInstance
+        });
     }
 
     highlightMarker(index){
+        this.unhighlightMarker();
         if(this.markers[index] && this.mapInstance.getBounds().contains(this.markers[index].getPosition())) {
             this.activeIconIndex = index;
             this.markers[this.activeIconIndex].setAnimation(this.map.Animation.BOUNCE);
@@ -126,8 +137,10 @@ export default class mapUtil{
         if(this.markers[markerIndex]) {
             const marker = this.markers[markerIndex];
             this.mapInstance.panTo(marker.getPosition());
-            this.mapInstance.setZoom(14);
-            this.mapRecenter();
+            if(this.mapInstance.getZoom() < 15) {
+                this.mapInstance.setZoom(15);
+            }
+            // this.mapRecenter();
             if(markerIndex !== this.activeIconIndex) {
                 this.unhighlightMarker();
                 this.highlightMarker(markerIndex);
@@ -145,5 +158,28 @@ export default class mapUtil{
             point1.x - point2.x,
             point1.y + point2.y
         )));
+    } 
+
+    renderDirection(pointA, pointB){
+        return new Promise((resolve, reject) => {
+            this.directionsService.route({
+                origin: pointA,
+                destination: pointB,
+                avoidTolls: true,
+                avoidHighways: false,
+                travelMode: this.map.TravelMode.DRIVING
+            }, (response, status) => {
+                if(status === this.map.DirectionsStatus.OK) {
+                    this.directionsDisplay.setDirections(response);
+                    resolve(response);
+                } else {
+                    reject(`Directions request failed due to ${status}`);
+                }
+            });
+        });
+    }
+
+    removeDirection(){
+        this.directionsDisplay.set('directions', null);
     }
 }
