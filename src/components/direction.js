@@ -18,7 +18,6 @@ export default class Direction extends PureComponent{
         e.preventDefault();
         const pointA = new this.props.mapHelper.map.LatLng(this.props.position.lat, this.props.position.lng);
         this.props.mapHelper.renderDirection(pointA, this.props.selectedResult.geometry.location).then(response => {
-            console.log(response, response.routes[0].legs[0].steps);
             try{
                 this.setState({steps: response.routes[0].legs[0].steps});
             } catch(e){/*Do Nothing*/}

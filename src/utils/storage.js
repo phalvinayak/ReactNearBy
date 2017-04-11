@@ -30,7 +30,6 @@ export default {
     setKey(store, key, value){
         let obj = this.get(store);
         obj[key] = value;
-        console.log(obj);
         return this.set(store, obj);
     },
 

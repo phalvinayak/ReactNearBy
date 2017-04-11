@@ -118,6 +118,9 @@ export default class App extends Component {
                 <div className={`load-wrap ${this.state.isSearching ? "" : "hide"}`}>
                     <span className="loading"></span>
                 </div>
+                <a href="https://github.com/phalvinayak/ReactNearBy" target="_blank">
+                    <img style={{position: "absolute", top: 0, right: 0,border: 0}} src="/icons/ribbon.png" alt="Fork me on GitHub" />
+                </a>
             </div>
         );
     }

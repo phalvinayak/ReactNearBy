@@ -1,7 +1,6 @@
 import React from "react";
 
 export default ({steps}) => {
-    console.log("Steps: ", steps);
     if(!steps.length){
         return null;
     }
